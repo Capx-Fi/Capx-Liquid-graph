@@ -1,0 +1,17 @@
+{
+  "name": "liquid-master",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ liquid-master",
+    "create-local": "graph create --node http://localhost:8020/ liquid-master",
+    "remove-local": "graph remove --node http://localhost:8020/ liquid-master",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 liquid-master"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.23.2",
+    "@graphprotocol/graph-ts": "0.23.1",
+    "matchstick-as": "^0.4.2"
+  }
+}
