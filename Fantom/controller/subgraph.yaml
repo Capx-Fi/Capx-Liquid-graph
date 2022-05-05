@@ -1,0 +1,45 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Controller
+    network: fantom
+    source:
+      address: "0x30B9A8279298Ba8d37Bf76b9f2A805D656fC1C07"
+      abi: Controller
+      startBlock: 36941971
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - AdminChanged
+        - BeaconUpgraded
+        - CreateVest
+        - OwnershipTransferred
+        - ProjectInfo
+        - TransferWrapped
+        - Upgraded
+        - Withdraw
+      abis:
+        - name: Controller
+          file: ./abis/Controller.json
+      eventHandlers:
+        - event: AdminChanged(address,address)
+          handler: handleAdminChanged
+        - event: BeaconUpgraded(indexed address)
+          handler: handleBeaconUpgraded
+        - event: CreateVest(indexed address,address,address,uint256,uint256,address,string,bool)
+          handler: handleCreateVest
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: ProjectInfo(indexed address,string,address,uint256)
+          handler: handleProjectInfo
+        - event: TransferWrapped(address,indexed address,address,uint256)
+          handler: handleTransferWrapped
+        - event: Upgraded(indexed address)
+          handler: handleUpgraded
+        - event: Withdraw(indexed address,uint256,address)
+          handler: handleWithdraw
+      file: ./src/mapping.ts
