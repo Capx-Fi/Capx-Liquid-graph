@@ -1,0 +1,45 @@
+specVersion: 0.0.2
+schema:
+  file: schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Vesting
+    network: rinkeby
+    source:
+      address: "0xCf6486d454Dc7f35D2E29cdB406F5BdEAE5137aA"
+      abi: Vesting
+      startBlock: 9863631
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - AdminChanged
+        - BeaconUpgraded
+        - CreateVest
+        - OwnershipTransferred
+        - ProjectInfo
+        - TransferLock
+        - Upgraded
+        - Withdraw
+      abis:
+        - name: Vesting
+          file: Vesting/abis/Vesting.json
+      eventHandlers:
+        - event: AdminChanged(address,address)
+          handler: handleAdminChanged
+        - event: BeaconUpgraded(indexed address)
+          handler: handleBeaconUpgraded
+        - event: CreateVest(uint256,indexed address,address,address,uint256,uint256)
+          handler: handleCreateVest
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: ProjectInfo(indexed address,indexed address)
+          handler: handleProjectInfo
+        - event: TransferLock(uint256,address,indexed address,address,uint256,uint256)
+          handler: handleTransferLock
+        - event: Upgraded(indexed address)
+          handler: handleUpgraded
+        - event: Withdraw(uint256,indexed address,uint256,address,uint256)
+          handler: handleWithdraw
+      file: Vesting/Vesting.wasm
