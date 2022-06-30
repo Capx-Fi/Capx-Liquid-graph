@@ -1,0 +1,16 @@
+{
+  "name": "capx-liquid-bsc",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ shreyas3336/capx-liquid-bsc",
+    "create-local": "graph create --node http://localhost:8020/ shreyas3336/capx-liquid-bsc",
+    "remove-local": "graph remove --node http://localhost:8020/ shreyas3336/capx-liquid-bsc",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 shreyas3336/capx-liquid-bsc"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.29.0",
+    "@graphprotocol/graph-ts": "0.26.0"
+  }
+}

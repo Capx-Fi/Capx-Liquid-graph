@@ -1,0 +1,13 @@
+{
+  "fuji": {
+    "Master": {
+      "address": "0xbfa83A2a2AcC83dFa90eFa2d0878054c6e37a5d6"
+    },
+    "Controller": {
+      "address": "0x3c141E6c5f6317Ce22d544c8B796ddeb6C6E6DEc"
+    },
+    "Vesting": {
+      "address": "0xD3cD2Fe92034865f11461352Ebc10da40d609573"
+    }
+  }
+}
