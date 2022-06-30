@@ -39,13 +39,18 @@ This query fetches aggregated data from all derivatives created by the protocol 
 ```
 ## Query URLs
 
-#### Rinkeby
+#### Rinkeby (Deprecated)
 
 | Subgraph     | Query URL  |
 |---------------------|--------------------------------------------------------------------|
 | Master Subgraph     | https://api.studio.thegraph.com/query/16341/liquid-master/v3.0.0   |
 | Controller Subgraph | https://api.studio.thegraph.com/query/16341/liquid-original/v3.0.0 |
 | Vesting Subgraph    | https://api.studio.thegraph.com/query/16341/liquid-vesting/v3.0.0  |
+
+### Goerli 
+| Subgraph     | Query URL  |
+|---------------------|--------------------------------------------------------------------|
+| Liquid Subgraph     | https://api.thegraph.com/subgraphs/name/shreyas3336/capx-liquid-goerli   |
 
 #### Binance Smart Chain (BSC)
 | Subgraph     | Query URL  |

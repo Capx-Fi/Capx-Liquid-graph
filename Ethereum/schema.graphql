@@ -1,10 +1,13 @@
 type Project @entity {
   id: ID!
   projectOwnerAddress: Bytes! 
+  projectName: String!
   projectTokenAddress: Bytes!
   projectTokenTicker: String!
+  projectDocHash: String!
   projectTokenDecimal: BigInt!
   derivatives: [Derivative!]! @derivedFrom(field: "projectID")
+  locks: [Lock!]! @derivedFrom(field:"projectID")
 }
 
 type Derivative @entity {
@@ -12,13 +15,22 @@ type Derivative @entity {
   wrappedTokenTicker: String!
   unlockTime: BigInt!
   totalSupply: BigInt!
-  holders: [UserHoldings!]! @derivedFrom(field: "derivativeID")
+  holders: [UserHolding!]! @derivedFrom(field: "derivativeID")
   projectID: Project!
 }
 
-type UserHoldings @entity {
+type UserHolding @entity {
   id: ID!
   address: Bytes!
   tokenAmount: BigInt!
   derivativeID: Derivative!
+}
+
+type Lock @entity {
+  id: ID!
+  address: Bytes!
+  tokenAmount: BigInt!
+  unlockTime: BigInt!
+  vestID: BigInt!
+  projectID: Project!
 }

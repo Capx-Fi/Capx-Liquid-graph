@@ -1,0 +1,13 @@
+{
+  "goerli": {
+    "Master": {
+      "address": "0xd83B0b4e0C35A48B0A47713D1645F971DA522d14"
+    },
+    "Controller": {
+      "address": "0xdDb4276126ca9B295CFAf36513F33995822f2E9A"
+    },
+    "Vesting": {
+      "address": "0xCCc010700493EC89c7D8Ec9e6d9146Df9eD5E812"
+    }
+  }
+}
