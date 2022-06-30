@@ -2,17 +2,17 @@
 
 [Capx Liquid](https://liquid.capx.fi/) is a decentralized platform that allows project teams, investors, and other vesting token holders to vest tokens using a "Smart Vesting Contract". This subgraph dynamically tracks any vesting schedule created by project teams, investors, or token holders, maintaining the state of vesting schedules.
 
-## Subgraphs
+## Contracts
 
 #### Master
-Maintains the data corresponding to every new Project/Protocol On-boarded on the Capx Liquid platform.
+Emits the data corresponding to every new Project/Protocol On-boarded on the Capx Liquid platform.
 #### Controller
-Maintains all the WVTs (derivatives) information such as unlock time for the vesting schedule, the holders, etc for the project/protocol On-boarded on the Capx Liquid platform.
+Emits all the WVTs (derivatives) information such as unlock time for the vesting schedule, the holders, etc for the project/protocol On-boarded on the Capx Liquid platform.
 #### Vesting
-Maintains all the vesting locks created by the project/protocol On-boarded on the Capx Liquid platform.
+Emits all the vesting locks created by the project/protocol On-boarded on the Capx Liquid platform.
 
 ## Example Query
-#### Querying Derivatives Information of Capx Liquid controller subgraph
+#### Querying Derivatives Information of Capx Liquid subgraph
 
 This query fetches aggregated data from all derivatives created by the protocol for each project. 
 
@@ -39,18 +39,40 @@ This query fetches aggregated data from all derivatives created by the protocol 
 ```
 ## Query URLs
 
-#### Rinkeby (Deprecated)
+#### Goerli 
+| Subgraph     | Query URL  |
+|---------------------|--------------------------------------------------------------------|
+| Liquid Subgraph     | https://api.thegraph.com/subgraphs/name/shreyas3336/capx-liquid-goerli   |
+
+#### Binance Smart Chain (BSC) 
+| Subgraph     | Query URL  |
+|---------------------|--------------------------------------------------------------------|
+| Liquid Subgraph     | https://api.thegraph.com/subgraphs/name/shreyas3336/capx-liquid-bsc   |
+
+#### Matic (Polygon)
+| Subgraph     | Query URL  |
+|---------------------|--------------------------------------------------------------------|
+| Liquid Subgraph     | https://api.thegraph.com/subgraphs/name/shreyas3336/capx-liquid-polygon   |
+
+#### Avalanche 
+| Subgraph     | Query URL  |
+|---------------------|--------------------------------------------------------------------|
+| Liquid Subgraph     | https://api.thegraph.com/subgraphs/name/shreyas3336/capx-liquid-avalanche   |
+
+#### Fantom 
+| Subgraph     | Query URL  |
+|---------------------|--------------------------------------------------------------------|
+| Liquid Subgraph     | https://api.thegraph.com/subgraphs/name/shreyas3336/capx-liquid-fantom   |
+
+## Query URLs (Deprecated)
+
+#### Rinkeby
 
 | Subgraph     | Query URL  |
 |---------------------|--------------------------------------------------------------------|
 | Master Subgraph     | https://api.studio.thegraph.com/query/16341/liquid-master/v3.0.0   |
 | Controller Subgraph | https://api.studio.thegraph.com/query/16341/liquid-original/v3.0.0 |
 | Vesting Subgraph    | https://api.studio.thegraph.com/query/16341/liquid-vesting/v3.0.0  |
-
-### Goerli 
-| Subgraph     | Query URL  |
-|---------------------|--------------------------------------------------------------------|
-| Liquid Subgraph     | https://api.thegraph.com/subgraphs/name/shreyas3336/capx-liquid-goerli   |
 
 #### Binance Smart Chain (BSC)
 | Subgraph     | Query URL  |
