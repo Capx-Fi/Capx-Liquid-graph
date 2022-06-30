@@ -1,0 +1,16 @@
+{
+  "name": "capx-liquid-polygon",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ shreyas3336/capx-liquid-polygon",
+    "create-local": "graph create --node http://localhost:8020/ shreyas3336/capx-liquid-polygon",
+    "remove-local": "graph remove --node http://localhost:8020/ shreyas3336/capx-liquid-polygon",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 shreyas3336/capx-liquid-polygon"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.29.0",
+    "@graphprotocol/graph-ts": "0.26.0"
+  }
+}

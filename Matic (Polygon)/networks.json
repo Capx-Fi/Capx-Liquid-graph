@@ -1,0 +1,13 @@
+{
+  "mumbai": {
+    "Master": {
+      "address": "0x9cCFc9B742856fE8E5dc520Da7D9377E1a10e77d"
+    },
+    "Controller": {
+      "address": "0x73AfEFb5108AED20E80A564bAB866d6379051ECF"
+    },
+    "Vesting": {
+      "address": "0xA93B2C7Db390cf6fC20d1D1B2C23DfC4DC3222c5"
+    }
+  }
+}
