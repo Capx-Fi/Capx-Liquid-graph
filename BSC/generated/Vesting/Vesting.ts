@@ -145,24 +145,28 @@ export class TransferLock__Params {
     this._event = event;
   }
 
-  get userAddress(): Address {
-    return this._event.parameters[0].value.toAddress();
+  get vestID(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
   }
 
-  get wrappedTokenAddress(): Address {
+  get userAddress(): Address {
     return this._event.parameters[1].value.toAddress();
   }
 
-  get receiverAddress(): Address {
+  get wrappedTokenAddress(): Address {
     return this._event.parameters[2].value.toAddress();
   }
 
+  get receiverAddress(): Address {
+    return this._event.parameters[3].value.toAddress();
+  }
+
   get amount(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
+    return this._event.parameters[4].value.toBigInt();
   }
 
   get unlockTime(): BigInt {
-    return this._event.parameters[4].value.toBigInt();
+    return this._event.parameters[5].value.toBigInt();
   }
 }
 
@@ -197,20 +201,24 @@ export class Withdraw__Params {
     this._event = event;
   }
 
+  get vestID(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
   get userAddress(): Address {
-    return this._event.parameters[0].value.toAddress();
+    return this._event.parameters[1].value.toAddress();
   }
 
   get amount(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
+    return this._event.parameters[2].value.toBigInt();
   }
 
   get wrappedTokenAddress(): Address {
-    return this._event.parameters[2].value.toAddress();
+    return this._event.parameters[3].value.toAddress();
   }
 
   get unlockTime(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
+    return this._event.parameters[4].value.toBigInt();
   }
 }
 
@@ -249,6 +257,29 @@ export class Vesting__lockedTokenResult {
 export class Vesting extends ethereum.SmartContract {
   static bind(address: Address): Vesting {
     return new Vesting("Vesting", address);
+  }
+
+  futureMasterController(): Address {
+    let result = super.call(
+      "futureMasterController",
+      "futureMasterController():(address)",
+      []
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_futureMasterController(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "futureMasterController",
+      "futureMasterController():(address)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   lockId(): BigInt {
@@ -354,19 +385,27 @@ export class Vesting extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  newOwner(): Address {
-    let result = super.call("newOwner", "newOwner():(address)", []);
+  newMasterDeadline(): BigInt {
+    let result = super.call(
+      "newMasterDeadline",
+      "newMasterDeadline():(uint256)",
+      []
+    );
 
-    return result[0].toAddress();
+    return result[0].toBigInt();
   }
 
-  try_newOwner(): ethereum.CallResult<Address> {
-    let result = super.tryCall("newOwner", "newOwner():(address)", []);
+  try_newMasterDeadline(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "newMasterDeadline",
+      "newMasterDeadline():(uint256)",
+      []
+    );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   owner(): Address {
@@ -557,6 +596,88 @@ export class SetMasterCall__Outputs {
   _call: SetMasterCall;
 
   constructor(call: SetMasterCall) {
+    this._call = call;
+  }
+}
+
+export class CommitTransferMasterCall extends ethereum.Call {
+  get inputs(): CommitTransferMasterCall__Inputs {
+    return new CommitTransferMasterCall__Inputs(this);
+  }
+
+  get outputs(): CommitTransferMasterCall__Outputs {
+    return new CommitTransferMasterCall__Outputs(this);
+  }
+}
+
+export class CommitTransferMasterCall__Inputs {
+  _call: CommitTransferMasterCall;
+
+  constructor(call: CommitTransferMasterCall) {
+    this._call = call;
+  }
+
+  get _newMaster(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class CommitTransferMasterCall__Outputs {
+  _call: CommitTransferMasterCall;
+
+  constructor(call: CommitTransferMasterCall) {
+    this._call = call;
+  }
+}
+
+export class ApplyTransferMasterCall extends ethereum.Call {
+  get inputs(): ApplyTransferMasterCall__Inputs {
+    return new ApplyTransferMasterCall__Inputs(this);
+  }
+
+  get outputs(): ApplyTransferMasterCall__Outputs {
+    return new ApplyTransferMasterCall__Outputs(this);
+  }
+}
+
+export class ApplyTransferMasterCall__Inputs {
+  _call: ApplyTransferMasterCall;
+
+  constructor(call: ApplyTransferMasterCall) {
+    this._call = call;
+  }
+}
+
+export class ApplyTransferMasterCall__Outputs {
+  _call: ApplyTransferMasterCall;
+
+  constructor(call: ApplyTransferMasterCall) {
+    this._call = call;
+  }
+}
+
+export class RevertMasterTransferCall extends ethereum.Call {
+  get inputs(): RevertMasterTransferCall__Inputs {
+    return new RevertMasterTransferCall__Inputs(this);
+  }
+
+  get outputs(): RevertMasterTransferCall__Outputs {
+    return new RevertMasterTransferCall__Outputs(this);
+  }
+}
+
+export class RevertMasterTransferCall__Inputs {
+  _call: RevertMasterTransferCall;
+
+  constructor(call: RevertMasterTransferCall) {
+    this._call = call;
+  }
+}
+
+export class RevertMasterTransferCall__Outputs {
+  _call: RevertMasterTransferCall;
+
+  constructor(call: RevertMasterTransferCall) {
     this._call = call;
   }
 }

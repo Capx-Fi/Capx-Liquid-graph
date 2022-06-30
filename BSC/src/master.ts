@@ -1,25 +1,19 @@
-import { BigInt } from "@graphprotocol/graph-ts"
+import { BigInt, Address } from "@graphprotocol/graph-ts"
 import {
   Master,
-  AdminChanged,
-  BeaconUpgraded,
-  OwnershipTransferred,
   ProjectInfo,
-  Upgraded
 } from "../generated/Master/Master"
-import { Project } from "../generated/schema"
+import {
+  Project,
+} from "../generated/schema"
+import { log } from "@graphprotocol/graph-ts"
 
 function generateID(_user: string, _ticker: string): string {
-  return _user.concat("-LOCK-").concat(_ticker);
+  return _user.toLowerCase().concat("-LOCK-").concat(_ticker.toLowerCase());
 }
 
-export function handleAdminChanged(event: AdminChanged): void {}
-
-export function handleBeaconUpgraded(event: BeaconUpgraded): void {}
-
-export function handleOwnershipTransferred(event: OwnershipTransferred): void {}
-
-export function handleProjectInfo(event: ProjectInfo): void {
+// Master Event Handlers
+export function handleProjectInfoMaster(event: ProjectInfo): void {
   // Getting all the required data from the Event.
   let _projectName = event.params.name.toString();
   let _projectTokenAddress = event.params.tokenAddress;
@@ -42,8 +36,14 @@ export function handleProjectInfo(event: ProjectInfo): void {
     project.projectTokenTicker = _projectTokenTicker;
     project.projectDocHash = _projectDocHash;
     project.projectTokenDecimal = _projectDecimal;
+  } else if (project.projectName == "?") {
+    // If the Project exists, update it.
+    project.projectOwnerAddress = _projectOwner;
+    project.projectName = _projectName;
+    project.projectTokenAddress = _projectTokenAddress;
+    project.projectTokenTicker = _projectTokenTicker;
+    project.projectDocHash = _projectDocHash;
+    project.projectTokenDecimal = _projectDecimal;
   }
   project.save();
 }
-
-export function handleUpgraded(event: Upgraded): void {}

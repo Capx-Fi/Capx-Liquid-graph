@@ -1,0 +1,13 @@
+{
+  "chapel": {
+    "Master": {
+      "address": "0x7f8EDc9aC14BD669A5f68eC226c7c98A66BCc076"
+    },
+    "Controller": {
+      "address": "0x765D6a9fd7889F5D7414311799dAFf5E0eC34099"
+    },
+    "Vesting": {
+      "address": "0x1f2aEf238D61Dc7b16A4aD78b54d70F262e14483"
+    }
+  }
+}
