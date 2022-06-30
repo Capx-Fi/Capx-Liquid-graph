@@ -1,0 +1,82 @@
+specVersion: 0.0.4
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Master
+    network: fantom-testnet
+    source:
+      address: "0xbfa83A2a2AcC83dFa90eFa2d0878054c6e37a5d6"
+      abi: Master
+      startBlock: 8524294
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - ProjectInfo
+      abis:
+        - name: Master
+          file: ./abis/Master.json
+      eventHandlers:
+        - event: ProjectInfo(string,indexed address,string,string,address,uint256)
+          handler: handleProjectInfoMaster
+      file: ./src/master.ts
+  - kind: ethereum
+    name: Controller
+    network: fantom-testnet
+    source:
+      address: "0x3c141E6c5f6317Ce22d544c8B796ddeb6C6E6DEc"
+      abi: Controller
+      startBlock: 8524294
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - CreateVest
+        - TransferWrapped
+        - Withdraw
+        - ProjectInfo
+      abis:
+        - name: Controller
+          file: ./abis/Controller.json
+      eventHandlers:
+        - event: CreateVest(indexed address,address,address,uint256,uint256,address,string,bool)
+          handler: handleCreateVestController
+        - event: TransferWrapped(address,indexed address,address,uint256)
+          handler: handleTransferWrappedController
+        - event: Withdraw(indexed address,uint256,address)
+          handler: handleWithdrawController
+        - event: ProjectInfo(indexed address,string,address,uint256)
+          handler: handleProjectInfoController
+      file: ./src/controller.ts
+  - kind: ethereum/contract
+    name: Vesting
+    network: fantom-testnet
+    source:
+      address: "0xD3cD2Fe92034865f11461352Ebc10da40d609573"
+      abi: Vesting
+      startBlock: 8524294
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - CreateVest
+        - TransferLock
+        - Withdraw
+        - ProjectInfo
+      abis:
+        - name: Vesting
+          file: ./abis/Vesting.json
+      eventHandlers:
+        - event: CreateVest(uint256,indexed address,address,address,uint256,uint256)
+          handler: handleCreateVestLock
+        - event: TransferLock(uint256,address,indexed address,address,uint256,uint256)
+          handler: handleTransferLock
+        - event: Withdraw(uint256,indexed address,uint256,address,uint256)
+          handler: handleWithdrawLock
+        - event: ProjectInfo(indexed address,indexed address)
+          handler: handleProjectInfoVesting
+      file: ./src/vesting.ts
