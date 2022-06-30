@@ -107,21 +107,9 @@
     "type": "event"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "name": "assetAddresstoProjectOwner",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function",
     "constant": true
@@ -129,13 +117,7 @@
   {
     "inputs": [],
     "name": "liquidController",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function",
     "constant": true
@@ -143,13 +125,7 @@
   {
     "inputs": [],
     "name": "liquidFactory",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function",
     "constant": true
@@ -157,13 +133,7 @@
   {
     "inputs": [],
     "name": "liquidProposal",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function",
     "constant": true
@@ -171,13 +141,7 @@
   {
     "inputs": [],
     "name": "owner",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function",
     "constant": true
@@ -190,92 +154,40 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "name": "tokenAddress",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function",
     "constant": true
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "name": "tokenAmount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function",
     "constant": true
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "name": "tokenTime",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function",
     "constant": true
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "name": "tokenTransferable",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "view",
     "type": "function",
     "constant": true
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "newOwner", "type": "address" }
     ],
     "name": "transferOwnership",
     "outputs": [],
@@ -302,11 +214,7 @@
         "name": "newImplementation",
         "type": "address"
       },
-      {
-        "internalType": "bytes",
-        "name": "data",
-        "type": "bytes"
-      }
+      { "internalType": "bytes", "name": "data", "type": "bytes" }
     ],
     "name": "upgradeToAndCall",
     "outputs": [],
@@ -317,13 +225,7 @@
   {
     "inputs": [],
     "name": "vestingController",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function",
     "constant": true
@@ -337,11 +239,7 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "_controller",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "_controller", "type": "address" }
     ],
     "name": "setLiquidController",
     "outputs": [],
@@ -350,11 +248,7 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "_factory",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "_factory", "type": "address" }
     ],
     "name": "setLiquidFactory",
     "outputs": [],
@@ -363,11 +257,7 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "_proposal",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "_proposal", "type": "address" }
     ],
     "name": "setLiquidProposal",
     "outputs": [],
@@ -377,13 +267,7 @@
   {
     "inputs": [],
     "name": "getFactory",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function",
     "constant": true
@@ -391,24 +275,14 @@
   {
     "inputs": [],
     "name": "getProposal",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function",
     "constant": true
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "_controller",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "_controller", "type": "address" }
     ],
     "name": "setVestingController",
     "outputs": [],
@@ -417,26 +291,10 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "string",
-        "name": "_name",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "_documentHash",
-        "type": "string"
-      },
-      {
-        "internalType": "address",
-        "name": "_tokenAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "_amount",
-        "type": "uint256[]"
-      },
+      { "internalType": "string", "name": "_name", "type": "string" },
+      { "internalType": "string", "name": "_documentHash", "type": "string" },
+      { "internalType": "address", "name": "_tokenAddress", "type": "address" },
+      { "internalType": "uint256[]", "name": "_amount", "type": "uint256[]" },
       {
         "internalType": "address[]",
         "name": "_liquid_distAddress",
@@ -485,11 +343,7 @@
         "name": "_wrappedTokenAddress",
         "type": "address"
       },
-      {
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
-      }
+      { "internalType": "uint256", "name": "_amount", "type": "uint256" }
     ],
     "name": "withdrawToken",
     "outputs": [],
@@ -497,13 +351,7 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_id",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "_id", "type": "uint256" }],
     "name": "withdrawVestingLock",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -511,11 +359,7 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_id",
-        "type": "uint256"
-      },
+      { "internalType": "uint256", "name": "_id", "type": "uint256" },
       {
         "internalType": "address",
         "name": "_receiverAddress",

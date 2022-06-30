@@ -17,8 +17,10 @@ export class Project extends Entity {
     this.set("id", Value.fromString(id));
 
     this.set("projectOwnerAddress", Value.fromBytes(Bytes.empty()));
+    this.set("projectName", Value.fromString(""));
     this.set("projectTokenAddress", Value.fromBytes(Bytes.empty()));
     this.set("projectTokenTicker", Value.fromString(""));
+    this.set("projectDocHash", Value.fromString(""));
     this.set("projectTokenDecimal", Value.fromBigInt(BigInt.zero()));
   }
 
@@ -28,8 +30,7 @@ export class Project extends Entity {
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save Project entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
+        `Entities of type Project must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
       store.set("Project", id.toString(), this);
     }
@@ -57,6 +58,15 @@ export class Project extends Entity {
     this.set("projectOwnerAddress", Value.fromBytes(value));
   }
 
+  get projectName(): string {
+    let value = this.get("projectName");
+    return value!.toString();
+  }
+
+  set projectName(value: string) {
+    this.set("projectName", Value.fromString(value));
+  }
+
   get projectTokenAddress(): Bytes {
     let value = this.get("projectTokenAddress");
     return value!.toBytes();
@@ -75,6 +85,15 @@ export class Project extends Entity {
     this.set("projectTokenTicker", Value.fromString(value));
   }
 
+  get projectDocHash(): string {
+    let value = this.get("projectDocHash");
+    return value!.toString();
+  }
+
+  set projectDocHash(value: string) {
+    this.set("projectDocHash", Value.fromString(value));
+  }
+
   get projectTokenDecimal(): BigInt {
     let value = this.get("projectTokenDecimal");
     return value!.toBigInt();
@@ -91,6 +110,15 @@ export class Project extends Entity {
 
   set derivatives(value: Array<string>) {
     this.set("derivatives", Value.fromStringArray(value));
+  }
+
+  get locks(): Array<string> {
+    let value = this.get("locks");
+    return value!.toStringArray();
+  }
+
+  set locks(value: Array<string>) {
+    this.set("locks", Value.fromStringArray(value));
   }
 }
 
@@ -111,8 +139,7 @@ export class Derivative extends Entity {
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save Derivative entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
+        `Entities of type Derivative must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
       store.set("Derivative", id.toString(), this);
     }
@@ -177,7 +204,7 @@ export class Derivative extends Entity {
   }
 }
 
-export class UserHoldings extends Entity {
+export class UserHolding extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -189,19 +216,18 @@ export class UserHoldings extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id != null, "Cannot save UserHoldings entity without an ID");
+    assert(id != null, "Cannot save UserHolding entity without an ID");
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save UserHoldings entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
+        `Entities of type UserHolding must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
-      store.set("UserHoldings", id.toString(), this);
+      store.set("UserHolding", id.toString(), this);
     }
   }
 
-  static load(id: string): UserHoldings | null {
-    return changetype<UserHoldings | null>(store.get("UserHoldings", id));
+  static load(id: string): UserHolding | null {
+    return changetype<UserHolding | null>(store.get("UserHolding", id));
   }
 
   get id(): string {
@@ -238,5 +264,88 @@ export class UserHoldings extends Entity {
 
   set derivativeID(value: string) {
     this.set("derivativeID", Value.fromString(value));
+  }
+}
+
+export class Lock extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("address", Value.fromBytes(Bytes.empty()));
+    this.set("tokenAmount", Value.fromBigInt(BigInt.zero()));
+    this.set("unlockTime", Value.fromBigInt(BigInt.zero()));
+    this.set("vestID", Value.fromBigInt(BigInt.zero()));
+    this.set("projectID", Value.fromString(""));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Lock entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type Lock must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("Lock", id.toString(), this);
+    }
+  }
+
+  static load(id: string): Lock | null {
+    return changetype<Lock | null>(store.get("Lock", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get address(): Bytes {
+    let value = this.get("address");
+    return value!.toBytes();
+  }
+
+  set address(value: Bytes) {
+    this.set("address", Value.fromBytes(value));
+  }
+
+  get tokenAmount(): BigInt {
+    let value = this.get("tokenAmount");
+    return value!.toBigInt();
+  }
+
+  set tokenAmount(value: BigInt) {
+    this.set("tokenAmount", Value.fromBigInt(value));
+  }
+
+  get unlockTime(): BigInt {
+    let value = this.get("unlockTime");
+    return value!.toBigInt();
+  }
+
+  set unlockTime(value: BigInt) {
+    this.set("unlockTime", Value.fromBigInt(value));
+  }
+
+  get vestID(): BigInt {
+    let value = this.get("vestID");
+    return value!.toBigInt();
+  }
+
+  set vestID(value: BigInt) {
+    this.set("vestID", Value.fromBigInt(value));
+  }
+
+  get projectID(): string {
+    let value = this.get("projectID");
+    return value!.toString();
+  }
+
+  set projectID(value: string) {
+    this.set("projectID", Value.fromString(value));
   }
 }
