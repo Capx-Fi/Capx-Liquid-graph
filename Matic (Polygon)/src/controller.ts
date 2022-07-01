@@ -13,6 +13,8 @@ import {
   Lock
 } from "../generated/schema"
 import { log } from "@graphprotocol/graph-ts"
+import {Master} from "../generated/Master/Master"
+let MasterAddress = Address.fromString("0x9cCFc9B742856fE8E5dc520Da7D9377E1a10e77d")
 
 
 function generateID(_user: string, _ticker: string): string {
@@ -150,7 +152,9 @@ export function handleProjectInfoController(event : ProjectInfo): void {
     // Getting all the required data from the Event.
   let _projectTokenAddress = event.params.tokenAddress;
   let _projectTokenTicker = event.params.tokenTicker.toString();
-  let _projectOwner = event.params.creator;
+  // let _projectOwner = event.params.creator;
+  let masterInstance = Master.bind(MasterAddress)
+    let _projectOwner = masterInstance.assetAddresstoProjectOwner(_projectTokenAddress)
   let _projectDecimal = event.params.tokenDecimal;
 
   let _projectID = generateID(_projectOwner.toHexString(),_projectTokenAddress.toHexString())

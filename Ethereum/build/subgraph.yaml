@@ -1,14 +1,14 @@
 specVersion: 0.0.4
 schema:
-  file: ./schema.graphql
+  file: schema.graphql
 dataSources:
   - kind: ethereum
     name: Master
-    network: fantom-testnet
+    network: goerli
     source:
-      address: "0xbfa83A2a2AcC83dFa90eFa2d0878054c6e37a5d6"
+      address: "0xd83B0b4e0C35A48B0A47713D1645F971DA522d14"
       abi: Master
-      startBlock: 8524294
+      startBlock: 7100000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -17,18 +17,18 @@ dataSources:
         - ProjectInfo
       abis:
         - name: Master
-          file: ./abis/Master.json
+          file: Master/abis/Master.json
       eventHandlers:
         - event: ProjectInfo(string,indexed address,string,string,address,uint256)
           handler: handleProjectInfoMaster
-      file: ./src/master.ts
+      file: Master/Master.wasm
   - kind: ethereum
     name: Controller
-    network: fantom-testnet
+    network: goerli
     source:
-      address: "0x3c141E6c5f6317Ce22d544c8B796ddeb6C6E6DEc"
+      address: "0xdDb4276126ca9B295CFAf36513F33995822f2E9A"
       abi: Controller
-      startBlock: 8524294
+      startBlock: 7100000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -40,9 +40,9 @@ dataSources:
         - ProjectInfo
       abis:
         - name: Controller
-          file: ./abis/Controller.json
+          file: Controller/abis/Controller.json
         - name: Master
-          file: ./abis/Master.json
+          file: Controller/abis/Master.json
       eventHandlers:
         - event: CreateVest(indexed address,address,address,uint256,uint256,address,string,bool)
           handler: handleCreateVestController
@@ -52,14 +52,14 @@ dataSources:
           handler: handleWithdrawController
         - event: ProjectInfo(indexed address,string,address,uint256)
           handler: handleProjectInfoController
-      file: ./src/controller.ts
+      file: Controller/Controller.wasm
   - kind: ethereum/contract
     name: Vesting
-    network: fantom-testnet
+    network: goerli
     source:
-      address: "0xD3cD2Fe92034865f11461352Ebc10da40d609573"
+      address: "0xCCc010700493EC89c7D8Ec9e6d9146Df9eD5E812"
       abi: Vesting
-      startBlock: 8524294
+      startBlock: 7100000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -71,9 +71,9 @@ dataSources:
         - ProjectInfo
       abis:
         - name: Vesting
-          file: ./abis/Vesting.json
+          file: Vesting/abis/Vesting.json
         - name: Master
-          file: ./abis/Master.json
+          file: Vesting/abis/Master.json
       eventHandlers:
         - event: CreateVest(uint256,indexed address,address,address,uint256,uint256)
           handler: handleCreateVestLock
@@ -83,4 +83,4 @@ dataSources:
           handler: handleWithdrawLock
         - event: ProjectInfo(indexed address,indexed address)
           handler: handleProjectInfoVesting
-      file: ./src/vesting.ts
+      file: Vesting/Vesting.wasm

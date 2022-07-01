@@ -10,7 +10,12 @@ import {
   Project,
   Lock
 } from "../generated/schema"
+
+import {Master} from "../generated/Master/Master"
 import { log } from "@graphprotocol/graph-ts"
+import { markAsUntransferable } from "worker_threads"
+
+let MasterAddress = Address.fromString("0xd83B0b4e0C35A48B0A47713D1645F971DA522d14")
 
 function generateID(_user: string, _ticker: string): string {
     return _user.toLowerCase().concat("-LOCK-").concat(_ticker.toLowerCase());
@@ -94,7 +99,9 @@ export function handleWithdrawLock(event: Withdraw): void {
 
   export function handleProjectInfoVesting(event: ProjectInfo): void {
     let _projectTokenAddress = event.params.tokenAddress;
-    let _projectOwner = event.params.creator;
+    // let _projectOwner = event.params.creator;
+    let masterInstance = Master.bind(MasterAddress)
+    let _projectOwner = masterInstance.assetAddresstoProjectOwner(_projectTokenAddress)
     let _projectID = generateID(_projectOwner.toHexString(),_projectTokenAddress.toHexString())
 
     let project = Project.load(_projectID);
