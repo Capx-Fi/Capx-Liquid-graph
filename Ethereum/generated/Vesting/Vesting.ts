@@ -252,26 +252,6 @@ export class Vesting__lockedTokenResult {
     map.set("value4", ethereum.Value.fromBoolean(this.value4));
     return map;
   }
-
-  getTokenAddress(): Address {
-    return this.value0;
-  }
-
-  getWithdrawalAddress(): Address {
-    return this.value1;
-  }
-
-  getTokenAmount(): BigInt {
-    return this.value2;
-  }
-
-  getUnlockTime(): BigInt {
-    return this.value3;
-  }
-
-  getWithdrawn(): boolean {
-    return this.value4;
-  }
 }
 
 export class Vesting extends ethereum.SmartContract {

@@ -13,7 +13,6 @@ import {
 
 import {Master} from "../generated/Master/Master"
 import { log } from "@graphprotocol/graph-ts"
-import { markAsUntransferable } from "worker_threads"
 
 let MasterAddress = Address.fromString("0xd83B0b4e0C35A48B0A47713D1645F971DA522d14")
 
