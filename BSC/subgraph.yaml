@@ -41,6 +41,8 @@ dataSources:
       abis:
         - name: Controller
           file: ./abis/Controller.json
+        - name: Master
+          file: ./abis/Master.json
       eventHandlers:
         - event: CreateVest(indexed address,address,address,uint256,uint256,address,string,bool)
           handler: handleCreateVestController
@@ -70,6 +72,8 @@ dataSources:
       abis:
         - name: Vesting
           file: ./abis/Vesting.json
+        - name: Master
+          file: ./abis/Master.json
       eventHandlers:
         - event: CreateVest(uint256,indexed address,address,address,uint256,uint256)
           handler: handleCreateVestLock
