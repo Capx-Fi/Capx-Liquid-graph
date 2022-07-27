@@ -2,6 +2,12 @@
   "bsc": {
     "Master": {
       "address": "0x30B9A8279298Ba8d37Bf76b9f2A805D656fC1C07"
+    },
+    "Controller": {
+      "address": "0x316717ecEff2D3a612Deba49B5A21430c78D22f2"
+    },
+    "Vesting": {
+      "address": "0x1428c7f929b3Ac5d5c6619FC3F9C722d2cfC66A5"
     }
   }
 }
