@@ -33,6 +33,8 @@ type Lock @entity {
   id: ID!
   address: Bytes!
   tokenAmount: BigInt!
+  totalAllocated: BigInt!
+  totalWithdrawn: BigInt!
   unlockTime: BigInt!
   vestID: BigInt!
   projectID: Project!

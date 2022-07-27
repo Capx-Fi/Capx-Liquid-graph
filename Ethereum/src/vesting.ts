@@ -41,7 +41,9 @@ export function handleWithdrawLock(event: Withdraw): void {
     if (lock) {
       if(lock.unlockTime === _unlockTime && lock.address === _userAddress){
         let amount = lock.tokenAmount;
+        let lockTotalWithdrawn = lock.totalWithdrawn;
         lock.tokenAmount = amount.minus(_amount);
+        lock.totalWithdrawn = lockTotalWithdrawn.plus(_amount);
       }
       // Loading Derivative
       let derivative = Derivative.load(_wrappedTokenAddress);
@@ -139,6 +141,8 @@ export function handleWithdrawLock(event: Withdraw): void {
         lock = new Lock(_lockID);
         lock.address = _userAddress;
         lock.tokenAmount = _tokenAmount;
+        lock.totalAllocated = _tokenAmount;
+        lock.totalWithdrawn = BigInt.fromI32(0);
         lock.unlockTime = _unlockTime;
         lock.vestID = _vestID;
         lock.projectID = _projectID //project.id;

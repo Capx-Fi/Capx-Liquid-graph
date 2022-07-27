@@ -76,7 +76,7 @@ export function handleCreateVestController(event: CreateVest): void {
       }
       // Increase the Wrapped Asset Holdings of the User.
       let userTokenAmount = userHoldings.tokenAmount;
-      let userTotalAllocAmount = userHoldings.tokenAmount;
+      let userTotalAllocAmount = userHoldings.totalAllocated;
       userHoldings.tokenAmount = userTokenAmount.plus(_tokenAmount);
       userHoldings.totalAllocated = userTotalAllocAmount.plus(_tokenAmount);
       userHoldings.save();

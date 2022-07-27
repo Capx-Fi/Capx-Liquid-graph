@@ -304,6 +304,8 @@ export class Lock extends Entity {
 
     this.set("address", Value.fromBytes(Bytes.empty()));
     this.set("tokenAmount", Value.fromBigInt(BigInt.zero()));
+    this.set("totalAllocated", Value.fromBigInt(BigInt.zero()));
+    this.set("totalWithdrawn", Value.fromBigInt(BigInt.zero()));
     this.set("unlockTime", Value.fromBigInt(BigInt.zero()));
     this.set("vestID", Value.fromBigInt(BigInt.zero()));
     this.set("projectID", Value.fromString(""));
@@ -350,6 +352,24 @@ export class Lock extends Entity {
 
   set tokenAmount(value: BigInt) {
     this.set("tokenAmount", Value.fromBigInt(value));
+  }
+
+  get totalAllocated(): BigInt {
+    let value = this.get("totalAllocated");
+    return value!.toBigInt();
+  }
+
+  set totalAllocated(value: BigInt) {
+    this.set("totalAllocated", Value.fromBigInt(value));
+  }
+
+  get totalWithdrawn(): BigInt {
+    let value = this.get("totalWithdrawn");
+    return value!.toBigInt();
+  }
+
+  set totalWithdrawn(value: BigInt) {
+    this.set("totalWithdrawn", Value.fromBigInt(value));
   }
 
   get unlockTime(): BigInt {
