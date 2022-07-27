@@ -2,6 +2,12 @@
   "fantom": {
     "Master": {
       "address": "0xd297b094607DE535378000Fa6fc45e71627Fc839"
+    },
+    "Controller": {
+      "address": "0x30B9A8279298Ba8d37Bf76b9f2A805D656fC1C07"
+    },
+    "Vesting": {
+      "address": "0x5d985753aE3691a0A94d38eC2F12793006097416"
     }
   }
 }
