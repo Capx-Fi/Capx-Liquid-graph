@@ -44,7 +44,7 @@ export function handleCreateVestController(event: CreateVest): void {
     // Checking if the project already exists.
     let project = Project.load(_projectID);
     log.info("Create Vest - Project : {}",[(project != null).toString()]);
-    // if(project != null){
+    if(project != null){
       // If the project exists. Check the corresponding derivative asset exists or not.
       let derivative = Derivative.load(_wrappedTokenAddress.toLowerCase());
       if (derivative == null){
@@ -81,7 +81,7 @@ export function handleCreateVestController(event: CreateVest): void {
       userHoldings.totalAllocated = userTotalAllocAmount.plus(_tokenAmount);
       userHoldings.save();
       derivative.save();
-    // }
+    }
   }
   
   export function handleTransferWrappedController(event: TransferWrapped): void {
@@ -208,27 +208,29 @@ export function handleCreateVestController(event: CreateVest): void {
   }
 
 export function handleProjectInfoController(event : ProjectInfo): void {
-    // Getting all the required data from the Event.
+  // Getting all the required data from the Event.
   let _projectTokenAddress = event.params.tokenAddress;
   let _projectTokenTicker = event.params.tokenTicker.toString();
   // let _projectOwner = event.params.creator;
-  let masterInstance = Master.bind(MasterAddress);
-  let _projectOwner = masterInstance.assetAddresstoProjectOwner(_projectTokenAddress);
-  let _projectDecimal = event.params.tokenDecimal;
-
-  let _projectID = generateID(_projectOwner.toHexString(),_projectTokenAddress.toHexString())
-
-  // Checking if the project already exists.
-  let project = Project.load(_projectID);
-  if (project == null) {
-    // If the Project doesn't exist, create one.
-    project = new Project(_projectID);
-    project.projectOwnerAddress = _projectOwner;
-    project.projectTokenAddress = _projectTokenAddress;
-    project.projectTokenTicker = _projectTokenTicker;
-    project.projectTokenDecimal = _projectDecimal;
-    project.projectName = "?";
-    project.projectDocHash = "?";
+  let masterInstance = Master.bind(MasterAddress)
+  let _projectOwner = masterInstance.try_assetAddresstoProjectOwner(_projectTokenAddress)
+  if(!_projectOwner.reverted){
+    let _projectDecimal = event.params.tokenDecimal;
+  
+    let _projectID = generateID(_projectOwner.value.toHexString(),_projectTokenAddress.toHexString())
+  
+    // Checking if the project already exists.
+    let project = Project.load(_projectID);
+    if (project == null) {
+      // If the Project doesn't exist, create one.
+      project = new Project(_projectID);
+      project.projectOwnerAddress = _projectOwner.value;
+      project.projectTokenAddress = _projectTokenAddress;
+      project.projectTokenTicker = _projectTokenTicker;
+      project.projectTokenDecimal = _projectDecimal;
+      project.projectName = "?";
+      project.projectDocHash = "?";
+    }
+    project.save();
   }
-  project.save();
 }

@@ -127,8 +127,8 @@ export function handleWithdrawLock(event: Withdraw): void {
     let _projectID = generateID(_projectCreator.toHexString(), _projectAddress);
   
     // Checking if the project already exists.
-    // let project = Project.load(_projectID);
-    // if(project != null){
+    let project = Project.load(_projectID);
+    if(project != null){
       // Creating a unique Lock ID, i.e. a combination of the ProjectID & VestID.
       let _lockID = generateID(_projectAddress,_vestID.toString());
   
@@ -146,26 +146,28 @@ export function handleWithdrawLock(event: Withdraw): void {
         lock.projectID = _projectID //project.id;
       }
       lock.save();
-    //   project.save();
-    // }
+      project.save();
+    }
   }
 
   export function handleProjectInfoVesting(event: ProjectInfo): void {
     let _projectTokenAddress = event.params.tokenAddress;
     // let _projectOwner = event.params.creator;
     let masterInstance = Master.bind(MasterAddress)
-    let _projectOwner = masterInstance.assetAddresstoProjectOwner(_projectTokenAddress)
-    let _projectID = generateID(_projectOwner.toHexString(),_projectTokenAddress.toHexString())
-
-    let project = Project.load(_projectID);
-    if(project == null){
-      project = new Project(_projectID);
-    project.projectOwnerAddress = _projectOwner;
-    project.projectTokenAddress = _projectTokenAddress;
-    project.projectTokenTicker = "?";
-    project.projectTokenDecimal = BigInt.fromI32(-1);
-    project.projectName = "?";
-    project.projectDocHash = "?";
+    let _projectOwner = masterInstance.try_assetAddresstoProjectOwner(_projectTokenAddress)
+    if(!_projectOwner.reverted){
+      let _projectID = generateID(_projectOwner.value.toHexString(),_projectTokenAddress.toHexString())
+  
+      let project = Project.load(_projectID);
+      if(project == null){
+        project = new Project(_projectID);
+      project.projectOwnerAddress = _projectOwner.value;
+      project.projectTokenAddress = _projectTokenAddress;
+      project.projectTokenTicker = "?";
+      project.projectTokenDecimal = BigInt.fromI32(-1);
+      project.projectName = "?";
+      project.projectDocHash = "?";
+      }
+      project.save();
     }
-    project.save();
   }

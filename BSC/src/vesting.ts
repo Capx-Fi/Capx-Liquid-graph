@@ -128,8 +128,8 @@ export function handleWithdrawLock(event: Withdraw): void {
     let _projectID = generateID(_projectCreator.toHexString(), _projectAddress);
   
     // Checking if the project already exists.
-    // let project = Project.load(_projectID);
-    // if(project != null){
+    let project = Project.load(_projectID);
+    if(project != null){
       // Creating a unique Lock ID, i.e. a combination of the ProjectID & VestID.
       let _lockID = generateID(_projectAddress,_vestID.toString());
   
@@ -147,8 +147,8 @@ export function handleWithdrawLock(event: Withdraw): void {
         lock.projectID = _projectID //project.id;
       }
       lock.save();
-    //   project.save();
-    // }
+      project.save();
+    }
   }
 
   export function handleProjectInfoVesting(event: ProjectInfo): void {
