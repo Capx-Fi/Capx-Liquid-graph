@@ -11,7 +11,9 @@ import {
   Project,
   Derivative,
   UserHolding,
-  Lock
+  Lock,
+  Withdrawal,
+  Transfer
 } from "../generated/schema"
 import { Master } from "../generated/Master/Master"
 
@@ -66,12 +68,17 @@ export function handleCreateVestController(event: CreateVest): void {
         // If the User doesn't exist, create one.
         userHoldings = new UserHolding(userHoldingsID);
         userHoldings.tokenAmount = BigInt.fromI32(0);
+        userHoldings.totalAllocated = BigInt.fromI32(0);
+        userHoldings.totalWithdrawn = BigInt.fromI32(0);
+        userHoldings.totalTransferred = BigInt.fromI32(0);
         userHoldings.address = _userAddress;
         userHoldings.derivativeID = derivative.id;
       }
       // Increase the Wrapped Asset Holdings of the User.
       let userTokenAmount = userHoldings.tokenAmount;
+      let userTotalAllocAmount = userHoldings.tokenAmount;
       userHoldings.tokenAmount = userTokenAmount.plus(_tokenAmount);
+      userHoldings.totalAllocated = userTotalAllocAmount.plus(_tokenAmount);
       userHoldings.save();
       derivative.save();
     // }
@@ -79,6 +86,7 @@ export function handleCreateVestController(event: CreateVest): void {
   
   export function handleTransferWrappedController(event: TransferWrapped): void {
     // Getting all the required data from the Event.
+    let _txHash = event.transaction.hash;
     let _userAddress = event.params.userAddress;
     let _wrappedTokenAddress = event.params.wrappedTokenAddress.toHexString();
     let _receiverAddress = event.params.receiverAddress;
@@ -96,8 +104,31 @@ export function handleCreateVestController(event: CreateVest): void {
         if(senderUserHoldings != null){
           // Updating the Balance of Sender Address
           let senderTokenAmount = senderUserHoldings.tokenAmount;
+          let senderAllocAmount = senderUserHoldings.totalAllocated;
+          let senderTransAmount = senderUserHoldings.totalTransferred;
           senderUserHoldings.tokenAmount = senderTokenAmount.minus(_transferAmount);
+          senderUserHoldings.totalAllocated = senderAllocAmount.minus(_transferAmount);
+          senderUserHoldings.totalTransferred = senderTransAmount.plus(_transferAmount);
           senderUserHoldings.save();
+
+          // Create Transfer Entity
+          let transferID = derivative.projectID.toLowerCase()
+                            .concat(
+                              "-"
+                            ).concat(
+                              _userAddress.toHexString().toLowerCase()
+                            ).concat(
+                              "|"
+                            ).concat(
+                              _txHash.toHexString().toLowerCase()
+                            );
+          let transfer = new Transfer(transferID);
+          transfer.txHash = _txHash;
+          transfer.token = Address.fromHexString(_wrappedTokenAddress);
+          transfer.from = _userAddress;
+          transfer.to = _receiverAddress;
+          transfer.amount = _transferAmount;
+          transfer.save();
   
           // Creating a unique User ID, i.e. a combination of the User Address & the Wrapped Asset Address.
           let receiverID = generateID(_receiverAddress.toHexString(), _wrappedTokenAddress);
@@ -109,12 +140,17 @@ export function handleCreateVestController(event: CreateVest): void {
             receiverUserHoldings = new UserHolding(receiverID);
             receiverUserHoldings.address = _receiverAddress;
             receiverUserHoldings.tokenAmount = BigInt.fromI32(0);
+            receiverUserHoldings.totalAllocated = BigInt.fromI32(0);
+            receiverUserHoldings.totalWithdrawn = BigInt.fromI32(0);
+            receiverUserHoldings.totalTransferred = BigInt.fromI32(0);
             receiverUserHoldings.derivativeID = derivative.id;
           }
   
           // Updating the Balance of Receiver Address
           let receiverTokenAmount = receiverUserHoldings.tokenAmount;
+          let receiverAllocAmount = receiverUserHoldings.totalAllocated;
           receiverUserHoldings.tokenAmount = receiverTokenAmount.plus(_transferAmount);
+          receiverUserHoldings.totalAllocated = receiverAllocAmount.plus(_transferAmount);
           receiverUserHoldings.save();
         }
         derivative.save();
@@ -124,6 +160,7 @@ export function handleCreateVestController(event: CreateVest): void {
   
   export function handleWithdrawController(event: Withdraw): void {
     // Getting all the required data from the Event.
+    let _txHash = event.transaction.hash;
     let _userAddress = event.params.userAddress;
     let _amount = event.params.amount;
     let _wrappedTokenAddress = event.params.wrappedTokenAddress.toHexString();
@@ -143,10 +180,30 @@ export function handleCreateVestController(event: CreateVest): void {
       if(userHoldings != null){
         // Updating the Balance of User Address
         let userTokenAmount = userHoldings.tokenAmount;
+        let userTotalWithdrawAmt = userHoldings.totalWithdrawn;
         userHoldings.tokenAmount = userTokenAmount.minus(_amount);
+        userHoldings.totalWithdrawn = userTotalWithdrawAmt.plus(_amount);
         userHoldings.save();
       }
       derivative.save();
+
+      // Loading Withdraw Entity
+      let withdrawID = derivative.projectID.toLowerCase()
+        .concat(
+          "-"
+        ).concat(
+          _userAddress.toHexString().toLowerCase()
+        ).concat(
+          "|"
+        ).concat(
+          _txHash.toHexString().toLowerCase()
+        );
+      let withdraw = new Withdrawal(withdrawID);
+      withdraw.txHash = _txHash;
+      withdraw.token = Address.fromHexString(_wrappedTokenAddress);
+      withdraw.from = _userAddress;
+      withdraw.amount = _amount;
+      withdraw.save();
     }
   }
 

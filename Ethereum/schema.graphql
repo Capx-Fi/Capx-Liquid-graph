@@ -23,6 +23,9 @@ type UserHolding @entity {
   id: ID!
   address: Bytes!
   tokenAmount: BigInt!
+  totalAllocated: BigInt!
+  totalWithdrawn: BigInt!
+  totalTransferred: BigInt!
   derivativeID: Derivative!
 }
 
@@ -33,4 +36,23 @@ type Lock @entity {
   unlockTime: BigInt!
   vestID: BigInt!
   projectID: Project!
+}
+
+type Withdrawal @entity {
+  id: ID!
+  txHash: Bytes!
+  token: Bytes!
+  vestID: BigInt!
+  from: Bytes!
+  amount: BigInt!
+}
+
+type Transfer @entity {
+  id: ID!
+  txHash: Bytes!
+  token: Bytes!
+  vestID: BigInt!
+  from: Bytes!
+  to: Bytes!
+  amount: BigInt!
 }

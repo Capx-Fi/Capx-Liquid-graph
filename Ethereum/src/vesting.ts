@@ -8,7 +8,10 @@ import {
 } from "../generated/Vesting/Vesting"
 import {
   Project,
-  Lock
+  Lock,
+  Derivative,
+  Withdrawal,
+  Transfer
 } from "../generated/schema"
 
 import {Master} from "../generated/Master/Master"
@@ -23,6 +26,7 @@ function generateID(_user: string, _ticker: string): string {
 // Vesting Event Handlers
 export function handleWithdrawLock(event: Withdraw): void {
     // Getting all the required data from the Event.
+    let _txHash = event.transaction.hash;
     let _userAddress = event.params.userAddress;
     let _amount = event.params.amount;
     let _wrappedTokenAddress = event.params.wrappedTokenAddress.toHexString();
@@ -39,11 +43,35 @@ export function handleWithdrawLock(event: Withdraw): void {
         let amount = lock.tokenAmount;
         lock.tokenAmount = amount.minus(_amount);
       }
+      // Loading Derivative
+      let derivative = Derivative.load(_wrappedTokenAddress);
+      if(derivative!=null){
+        // Loading Withdraw Entity
+        let withdrawID = derivative.projectID.toLowerCase()
+                        .concat(
+                          "-"
+                        ).concat(
+                          _userAddress.toHexString().toLowerCase()
+                        ).concat(
+                          "|"
+                        ).concat(
+                          _txHash.toHexString().toLowerCase()
+                        );
+        let withdraw = new Withdrawal(withdrawID);
+        withdraw.txHash = _txHash;
+        withdraw.token = Address.fromHexString(_wrappedTokenAddress);
+        withdraw.vestID = _vestID;
+        withdraw.from = _userAddress;
+        withdraw.amount = _amount;
+        withdraw.save();
+      }
     }
   }
   
   export function handleTransferLock(event: TransferLock): void {
     // Getting all the required data from the Event.
+    let _txHash = event.transaction.hash;
+    let _userAddress = event.transaction.from;
     let _wrappedTokenAddress = event.params.wrappedTokenAddress.toHexString();
     let _receiverAddress = event.params.receiverAddress;
     let _vestID = event.params.vestID;
@@ -58,6 +86,30 @@ export function handleWithdrawLock(event: Withdraw): void {
       if(lock) {
         lock.address = _receiverAddress;
         lock.save();
+        // Loading Derivative
+        let derivative = Derivative.load(_wrappedTokenAddress);
+        if (derivative!= null) {
+          // Create Transfer Entity
+          let transferID = derivative.projectID.toLowerCase()
+                          .concat(
+                            "-"
+                          ).concat(
+                            _userAddress.toHexString().toLowerCase()
+                          ).concat(
+                            "|"
+                          ).concat(
+                            _txHash.toHexString().toLowerCase()
+                          );
+          let transfer = new Transfer(transferID);
+          transfer.txHash = _txHash;
+          transfer.token = Address.fromHexString(_wrappedTokenAddress);
+          transfer.vestID = _vestID;
+          transfer.from = _userAddress;
+          transfer.to = _receiverAddress;
+          transfer.amount = lock.tokenAmount;
+          transfer.save();
+        }
+
       }
     }
   }
