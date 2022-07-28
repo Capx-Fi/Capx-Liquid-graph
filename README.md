@@ -2,17 +2,17 @@
 
 [Capx Liquid](https://liquid.capx.fi/) is a decentralized platform that allows project teams, investors, and other vesting token holders to vest tokens using a "Smart Vesting Contract". This subgraph dynamically tracks any vesting schedule created by project teams, investors, or token holders, maintaining the state of vesting schedules.
 
-## Subgraphs
+## Contracts
 
 #### Master
-Maintains the data corresponding to every new Project/Protocol On-boarded on the Capx Liquid platform.
+Emits the data corresponding to every new Project/Protocol On-boarded on the Capx Liquid platform.
 #### Controller
-Maintains all the WVTs (derivatives) information such as unlock time for the vesting schedule, the holders, etc for the project/protocol On-boarded on the Capx Liquid platform.
+Emits all the WVTs (derivatives) information such as unlock time for the vesting schedule, the holders, etc for the project/protocol On-boarded on the Capx Liquid platform.
 #### Vesting
-Maintains all the vesting locks created by the project/protocol On-boarded on the Capx Liquid platform.
+Emits all the vesting locks created by the project/protocol On-boarded on the Capx Liquid platform.
 
 ## Example Query
-#### Querying Derivatives Information of Capx Liquid controller subgraph
+#### Querying Derivatives Information of Capx Liquid subgraph
 
 This query fetches aggregated data from all derivatives created by the protocol for each project. 
 
@@ -38,6 +38,34 @@ This query fetches aggregated data from all derivatives created by the protocol 
 }
 ```
 ## Query URLs
+
+#### Goerli 
+| Subgraph     | Query URL  |
+|---------------------|--------------------------------------------------------------------|
+| Liquid Subgraph     | https://api.thegraph.com/subgraphs/name/capxdev/capx-liquid-eth   |
+
+#### Binance Smart Chain (BSC) 
+| Subgraph     | Query URL  |
+|---------------------|--------------------------------------------------------------------|
+| Liquid Subgraph     | https://api.thegraph.com/subgraphs/name/capxdev/capx-liquid-bsc   |
+
+#### Matic (Polygon)
+| Subgraph     | Query URL  |
+|---------------------|--------------------------------------------------------------------|
+| Liquid Subgraph     | https://api.thegraph.com/subgraphs/name/capxdev/capx-liquid-matic   |
+
+#### Avalanche 
+| Subgraph     | Query URL  |
+|---------------------|--------------------------------------------------------------------|
+| Liquid Subgraph     | https://api.thegraph.com/subgraphs/name/capxdev/capx-liquid-avax   |
+
+#### Fantom 
+| Subgraph     | Query URL  |
+|---------------------|--------------------------------------------------------------------|
+| Liquid Subgraph     | https://api.thegraph.com/subgraphs/name/capxdev/capx-liquid-ftm   |
+
+
+## Query URLs (Deprecated)
 
 #### Ethereum
 
