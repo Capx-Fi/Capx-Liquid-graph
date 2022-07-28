@@ -10,7 +10,8 @@ import {
   Project,
   Derivative,
   UserHolding,
-  Lock
+  Withdrawal,
+  Transfer
 } from "../generated/schema"
 import { log } from "@graphprotocol/graph-ts"
 import {Master} from "../generated/Master/Master"
@@ -40,7 +41,7 @@ export function handleCreateVestController(event: CreateVest): void {
     // Checking if the project already exists.
     let project = Project.load(_projectID);
     log.info("Create Vest - Project : {}",[(project != null).toString()]);
-    // if(project != null){
+    if(project != null){
       // If the project exists. Check the corresponding derivative asset exists or not.
       let derivative = Derivative.load(_wrappedTokenAddress.toLowerCase());
       if (derivative == null){
@@ -64,19 +65,25 @@ export function handleCreateVestController(event: CreateVest): void {
         // If the User doesn't exist, create one.
         userHoldings = new UserHolding(userHoldingsID);
         userHoldings.tokenAmount = BigInt.fromI32(0);
+        userHoldings.totalAllocated = BigInt.fromI32(0);
+        userHoldings.totalWithdrawn = BigInt.fromI32(0);
+        userHoldings.totalTransferred = BigInt.fromI32(0);
         userHoldings.address = _userAddress;
         userHoldings.derivativeID = derivative.id;
       }
       // Increase the Wrapped Asset Holdings of the User.
       let userTokenAmount = userHoldings.tokenAmount;
+      let userTotalAllocAmount = userHoldings.totalAllocated;
       userHoldings.tokenAmount = userTokenAmount.plus(_tokenAmount);
+      userHoldings.totalAllocated = userTotalAllocAmount.plus(_tokenAmount);
       userHoldings.save();
       derivative.save();
-    // }
+    }
   }
   
   export function handleTransferWrappedController(event: TransferWrapped): void {
     // Getting all the required data from the Event.
+    let _txHash = event.transaction.hash;
     let _userAddress = event.params.userAddress;
     let _wrappedTokenAddress = event.params.wrappedTokenAddress.toHexString();
     let _receiverAddress = event.params.receiverAddress;
@@ -94,8 +101,31 @@ export function handleCreateVestController(event: CreateVest): void {
         if(senderUserHoldings != null){
           // Updating the Balance of Sender Address
           let senderTokenAmount = senderUserHoldings.tokenAmount;
+          let senderAllocAmount = senderUserHoldings.totalAllocated;
+          let senderTransAmount = senderUserHoldings.totalTransferred;
           senderUserHoldings.tokenAmount = senderTokenAmount.minus(_transferAmount);
+          senderUserHoldings.totalAllocated = senderAllocAmount.minus(_transferAmount);
+          senderUserHoldings.totalTransferred = senderTransAmount.plus(_transferAmount);
           senderUserHoldings.save();
+
+          // Create Transfer Entity
+          let transferID = derivative.projectID.toLowerCase()
+                            .concat(
+                              "-"
+                            ).concat(
+                              _userAddress.toHexString().toLowerCase()
+                            ).concat(
+                              "|"
+                            ).concat(
+                              _txHash.toHexString().toLowerCase()
+                            );
+          let transfer = new Transfer(transferID);
+          transfer.txHash = _txHash;
+          transfer.token = Address.fromHexString(_wrappedTokenAddress);
+          transfer.from = _userAddress;
+          transfer.to = _receiverAddress;
+          transfer.amount = _transferAmount;
+          transfer.save();
   
           // Creating a unique User ID, i.e. a combination of the User Address & the Wrapped Asset Address.
           let receiverID = generateID(_receiverAddress.toHexString(), _wrappedTokenAddress);
@@ -107,12 +137,17 @@ export function handleCreateVestController(event: CreateVest): void {
             receiverUserHoldings = new UserHolding(receiverID);
             receiverUserHoldings.address = _receiverAddress;
             receiverUserHoldings.tokenAmount = BigInt.fromI32(0);
+            receiverUserHoldings.totalAllocated = BigInt.fromI32(0);
+            receiverUserHoldings.totalWithdrawn = BigInt.fromI32(0);
+            receiverUserHoldings.totalTransferred = BigInt.fromI32(0);
             receiverUserHoldings.derivativeID = derivative.id;
           }
   
           // Updating the Balance of Receiver Address
           let receiverTokenAmount = receiverUserHoldings.tokenAmount;
+          let receiverAllocAmount = receiverUserHoldings.totalAllocated;
           receiverUserHoldings.tokenAmount = receiverTokenAmount.plus(_transferAmount);
+          receiverUserHoldings.totalAllocated = receiverAllocAmount.plus(_transferAmount);
           receiverUserHoldings.save();
         }
         derivative.save();
@@ -122,6 +157,7 @@ export function handleCreateVestController(event: CreateVest): void {
   
   export function handleWithdrawController(event: Withdraw): void {
     // Getting all the required data from the Event.
+    let _txHash = event.transaction.hash;
     let _userAddress = event.params.userAddress;
     let _amount = event.params.amount;
     let _wrappedTokenAddress = event.params.wrappedTokenAddress.toHexString();
@@ -141,35 +177,57 @@ export function handleCreateVestController(event: CreateVest): void {
       if(userHoldings != null){
         // Updating the Balance of User Address
         let userTokenAmount = userHoldings.tokenAmount;
+        let userTotalWithdrawAmt = userHoldings.totalWithdrawn;
         userHoldings.tokenAmount = userTokenAmount.minus(_amount);
+        userHoldings.totalWithdrawn = userTotalWithdrawAmt.plus(_amount);
         userHoldings.save();
       }
       derivative.save();
+
+      // Loading Withdraw Entity
+      let withdrawID = derivative.projectID.toLowerCase()
+        .concat(
+          "-"
+        ).concat(
+          _userAddress.toHexString().toLowerCase()
+        ).concat(
+          "|"
+        ).concat(
+          _txHash.toHexString().toLowerCase()
+        );
+      let withdraw = new Withdrawal(withdrawID);
+      withdraw.txHash = _txHash;
+      withdraw.token = Address.fromHexString(_wrappedTokenAddress);
+      withdraw.from = _userAddress;
+      withdraw.amount = _amount;
+      withdraw.save();
     }
   }
 
 export function handleProjectInfoController(event : ProjectInfo): void {
     // Getting all the required data from the Event.
-  let _projectTokenAddress = event.params.tokenAddress;
-  let _projectTokenTicker = event.params.tokenTicker.toString();
-  // let _projectOwner = event.params.creator;
-  let masterInstance = Master.bind(MasterAddress)
-    let _projectOwner = masterInstance.assetAddresstoProjectOwner(_projectTokenAddress)
-  let _projectDecimal = event.params.tokenDecimal;
-
-  let _projectID = generateID(_projectOwner.toHexString(),_projectTokenAddress.toHexString())
-
-  // Checking if the project already exists.
-  let project = Project.load(_projectID);
-  if (project == null) {
-    // If the Project doesn't exist, create one.
-    project = new Project(_projectID);
-    project.projectOwnerAddress = _projectOwner;
-    project.projectTokenAddress = _projectTokenAddress;
-    project.projectTokenTicker = _projectTokenTicker;
-    project.projectTokenDecimal = _projectDecimal;
-    project.projectName = "?";
-    project.projectDocHash = "?";
-  }
-  project.save();
+    let _projectTokenAddress = event.params.tokenAddress;
+    let _projectTokenTicker = event.params.tokenTicker.toString();
+    // let _projectOwner = event.params.creator;
+    let masterInstance = Master.bind(MasterAddress)
+    let _projectOwner = masterInstance.try_assetAddresstoProjectOwner(_projectTokenAddress)
+    if(!_projectOwner.reverted){
+      let _projectDecimal = event.params.tokenDecimal;
+    
+      let _projectID = generateID(_projectOwner.value.toHexString(),_projectTokenAddress.toHexString())
+    
+      // Checking if the project already exists.
+      let project = Project.load(_projectID);
+      if (project == null) {
+        // If the Project doesn't exist, create one.
+        project = new Project(_projectID);
+        project.projectOwnerAddress = _projectOwner.value;
+        project.projectTokenAddress = _projectTokenAddress;
+        project.projectTokenTicker = _projectTokenTicker;
+        project.projectTokenDecimal = _projectDecimal;
+        project.projectName = "?";
+        project.projectDocHash = "?";
+      }
+      project.save();
+    }
 }

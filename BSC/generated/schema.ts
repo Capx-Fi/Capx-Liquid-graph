@@ -15,6 +15,13 @@ export class Project extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
+
+    this.set("projectOwnerAddress", Value.fromBytes(Bytes.empty()));
+    this.set("projectName", Value.fromString(""));
+    this.set("projectTokenAddress", Value.fromBytes(Bytes.empty()));
+    this.set("projectTokenTicker", Value.fromString(""));
+    this.set("projectDocHash", Value.fromString(""));
+    this.set("projectTokenDecimal", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -119,6 +126,11 @@ export class Derivative extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
+
+    this.set("wrappedTokenTicker", Value.fromString(""));
+    this.set("unlockTime", Value.fromBigInt(BigInt.zero()));
+    this.set("totalSupply", Value.fromBigInt(BigInt.zero()));
+    this.set("projectID", Value.fromString(""));
   }
 
   save(): void {
@@ -196,6 +208,13 @@ export class UserHolding extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
+
+    this.set("address", Value.fromBytes(Bytes.empty()));
+    this.set("tokenAmount", Value.fromBigInt(BigInt.zero()));
+    this.set("totalAllocated", Value.fromBigInt(BigInt.zero()));
+    this.set("totalWithdrawn", Value.fromBigInt(BigInt.zero()));
+    this.set("totalTransferred", Value.fromBigInt(BigInt.zero()));
+    this.set("derivativeID", Value.fromString(""));
   }
 
   save(): void {
@@ -241,6 +260,33 @@ export class UserHolding extends Entity {
     this.set("tokenAmount", Value.fromBigInt(value));
   }
 
+  get totalAllocated(): BigInt {
+    let value = this.get("totalAllocated");
+    return value!.toBigInt();
+  }
+
+  set totalAllocated(value: BigInt) {
+    this.set("totalAllocated", Value.fromBigInt(value));
+  }
+
+  get totalWithdrawn(): BigInt {
+    let value = this.get("totalWithdrawn");
+    return value!.toBigInt();
+  }
+
+  set totalWithdrawn(value: BigInt) {
+    this.set("totalWithdrawn", Value.fromBigInt(value));
+  }
+
+  get totalTransferred(): BigInt {
+    let value = this.get("totalTransferred");
+    return value!.toBigInt();
+  }
+
+  set totalTransferred(value: BigInt) {
+    this.set("totalTransferred", Value.fromBigInt(value));
+  }
+
   get derivativeID(): string {
     let value = this.get("derivativeID");
     return value!.toString();
@@ -255,6 +301,14 @@ export class Lock extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
+
+    this.set("address", Value.fromBytes(Bytes.empty()));
+    this.set("totalAllocated", Value.fromBigInt(BigInt.zero()));
+    this.set("totalWithdrawn", Value.fromBigInt(BigInt.zero()));
+    this.set("tokenAmount", Value.fromBigInt(BigInt.zero()));
+    this.set("unlockTime", Value.fromBigInt(BigInt.zero()));
+    this.set("vestID", Value.fromBigInt(BigInt.zero()));
+    this.set("projectID", Value.fromString(""));
   }
 
   save(): void {
@@ -291,6 +345,24 @@ export class Lock extends Entity {
     this.set("address", Value.fromBytes(value));
   }
 
+  get totalAllocated(): BigInt {
+    let value = this.get("totalAllocated");
+    return value!.toBigInt();
+  }
+
+  set totalAllocated(value: BigInt) {
+    this.set("totalAllocated", Value.fromBigInt(value));
+  }
+
+  get totalWithdrawn(): BigInt {
+    let value = this.get("totalWithdrawn");
+    return value!.toBigInt();
+  }
+
+  set totalWithdrawn(value: BigInt) {
+    this.set("totalWithdrawn", Value.fromBigInt(value));
+  }
+
   get tokenAmount(): BigInt {
     let value = this.get("tokenAmount");
     return value!.toBigInt();
@@ -325,5 +397,181 @@ export class Lock extends Entity {
 
   set projectID(value: string) {
     this.set("projectID", Value.fromString(value));
+  }
+}
+
+export class Withdrawal extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("txHash", Value.fromBytes(Bytes.empty()));
+    this.set("token", Value.fromBytes(Bytes.empty()));
+    this.set("vestID", Value.fromBigInt(BigInt.zero()));
+    this.set("from", Value.fromBytes(Bytes.empty()));
+    this.set("amount", Value.fromBigInt(BigInt.zero()));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Withdrawal entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type Withdrawal must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("Withdrawal", id.toString(), this);
+    }
+  }
+
+  static load(id: string): Withdrawal | null {
+    return changetype<Withdrawal | null>(store.get("Withdrawal", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get txHash(): Bytes {
+    let value = this.get("txHash");
+    return value!.toBytes();
+  }
+
+  set txHash(value: Bytes) {
+    this.set("txHash", Value.fromBytes(value));
+  }
+
+  get token(): Bytes {
+    let value = this.get("token");
+    return value!.toBytes();
+  }
+
+  set token(value: Bytes) {
+    this.set("token", Value.fromBytes(value));
+  }
+
+  get vestID(): BigInt {
+    let value = this.get("vestID");
+    return value!.toBigInt();
+  }
+
+  set vestID(value: BigInt) {
+    this.set("vestID", Value.fromBigInt(value));
+  }
+
+  get from(): Bytes {
+    let value = this.get("from");
+    return value!.toBytes();
+  }
+
+  set from(value: Bytes) {
+    this.set("from", Value.fromBytes(value));
+  }
+
+  get amount(): BigInt {
+    let value = this.get("amount");
+    return value!.toBigInt();
+  }
+
+  set amount(value: BigInt) {
+    this.set("amount", Value.fromBigInt(value));
+  }
+}
+
+export class Transfer extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("txHash", Value.fromBytes(Bytes.empty()));
+    this.set("token", Value.fromBytes(Bytes.empty()));
+    this.set("vestID", Value.fromBigInt(BigInt.zero()));
+    this.set("from", Value.fromBytes(Bytes.empty()));
+    this.set("to", Value.fromBytes(Bytes.empty()));
+    this.set("amount", Value.fromBigInt(BigInt.zero()));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Transfer entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type Transfer must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("Transfer", id.toString(), this);
+    }
+  }
+
+  static load(id: string): Transfer | null {
+    return changetype<Transfer | null>(store.get("Transfer", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get txHash(): Bytes {
+    let value = this.get("txHash");
+    return value!.toBytes();
+  }
+
+  set txHash(value: Bytes) {
+    this.set("txHash", Value.fromBytes(value));
+  }
+
+  get token(): Bytes {
+    let value = this.get("token");
+    return value!.toBytes();
+  }
+
+  set token(value: Bytes) {
+    this.set("token", Value.fromBytes(value));
+  }
+
+  get vestID(): BigInt {
+    let value = this.get("vestID");
+    return value!.toBigInt();
+  }
+
+  set vestID(value: BigInt) {
+    this.set("vestID", Value.fromBigInt(value));
+  }
+
+  get from(): Bytes {
+    let value = this.get("from");
+    return value!.toBytes();
+  }
+
+  set from(value: Bytes) {
+    this.set("from", Value.fromBytes(value));
+  }
+
+  get to(): Bytes {
+    let value = this.get("to");
+    return value!.toBytes();
+  }
+
+  set to(value: Bytes) {
+    this.set("to", Value.fromBytes(value));
+  }
+
+  get amount(): BigInt {
+    let value = this.get("amount");
+    return value!.toBigInt();
+  }
+
+  set amount(value: BigInt) {
+    this.set("amount", Value.fromBigInt(value));
   }
 }
