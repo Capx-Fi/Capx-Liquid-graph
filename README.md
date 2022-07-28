@@ -39,7 +39,7 @@ This query fetches aggregated data from all derivatives created by the protocol 
 ```
 ## Query URLs
 
-#### Goerli 
+#### Ethereum 
 | Subgraph     | Query URL  |
 |---------------------|--------------------------------------------------------------------|
 | Liquid Subgraph     | https://api.thegraph.com/subgraphs/name/capxdev/capx-liquid-eth   |
