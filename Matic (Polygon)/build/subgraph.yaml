@@ -1,6 +1,6 @@
 specVersion: 0.0.4
 schema:
-  file: ./schema.graphql
+  file: schema.graphql
 dataSources:
   - kind: ethereum
     name: Master
@@ -17,11 +17,11 @@ dataSources:
         - ProjectInfo
       abis:
         - name: Master
-          file: ./abis/Master.json
+          file: Master/abis/Master.json
       eventHandlers:
         - event: ProjectInfo(string,indexed address,string,string,address,uint256)
           handler: handleProjectInfoMaster
-      file: ./src/master.ts
+      file: Master/Master.wasm
   - kind: ethereum
     name: Controller
     network: mumbai
@@ -40,9 +40,9 @@ dataSources:
         - ProjectInfo
       abis:
         - name: Controller
-          file: ./abis/Controller.json
+          file: Controller/abis/Controller.json
         - name: Master
-          file: ./abis/Master.json
+          file: Controller/abis/Master.json
       eventHandlers:
         - event: CreateVest(indexed address,address,address,uint256,uint256,address,string,bool)
           handler: handleCreateVestController
@@ -52,7 +52,7 @@ dataSources:
           handler: handleWithdrawController
         - event: ProjectInfo(indexed address,string,address,uint256)
           handler: handleProjectInfoController
-      file: ./src/controller.ts
+      file: Controller/Controller.wasm
   - kind: ethereum/contract
     name: Vesting
     network: mumbai
@@ -71,9 +71,9 @@ dataSources:
         - ProjectInfo
       abis:
         - name: Vesting
-          file: ./abis/Vesting.json
+          file: Vesting/abis/Vesting.json
         - name: Master
-          file: ./abis/Master.json
+          file: Vesting/abis/Master.json
       eventHandlers:
         - event: CreateVest(uint256,indexed address,address,address,uint256,uint256)
           handler: handleCreateVestLock
@@ -83,4 +83,4 @@ dataSources:
           handler: handleWithdrawLock
         - event: ProjectInfo(indexed address,indexed address)
           handler: handleProjectInfoVesting
-      file: ./src/vesting.ts
+      file: Vesting/Vesting.wasm
