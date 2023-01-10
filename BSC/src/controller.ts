@@ -124,6 +124,7 @@ export function handleCreateVestController(event: CreateVest): void {
           transfer.token = Address.fromHexString(_wrappedTokenAddress);
           transfer.from = _userAddress;
           transfer.to = _receiverAddress;
+          transfer.vestID = BigInt.fromI32(0);
           transfer.amount = _transferAmount;
           transfer.save();
   
@@ -200,6 +201,7 @@ export function handleCreateVestController(event: CreateVest): void {
       withdraw.token = Address.fromHexString(_wrappedTokenAddress);
       withdraw.from = _userAddress;
       withdraw.amount = _amount;
+      withdraw.vestID = BigInt.fromI32(0);
       withdraw.save();
     }
   }
