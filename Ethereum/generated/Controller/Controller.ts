@@ -237,6 +237,14 @@ export class Controller__assetToDerivativeMapResult {
     map.set("value1", ethereum.Value.fromAddress(this.value1));
     return map;
   }
+
+  getSellable(): Address {
+    return this.value0;
+  }
+
+  getNonsellable(): Address {
+    return this.value1;
+  }
 }
 
 export class Controller extends ethereum.SmartContract {

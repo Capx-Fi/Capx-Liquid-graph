@@ -15,13 +15,6 @@ export class Project extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
-
-    this.set("projectOwnerAddress", Value.fromBytes(Bytes.empty()));
-    this.set("projectName", Value.fromString(""));
-    this.set("projectTokenAddress", Value.fromBytes(Bytes.empty()));
-    this.set("projectTokenTicker", Value.fromString(""));
-    this.set("projectDocHash", Value.fromString(""));
-    this.set("projectTokenDecimal", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -126,11 +119,6 @@ export class Derivative extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
-
-    this.set("wrappedTokenTicker", Value.fromString(""));
-    this.set("unlockTime", Value.fromBigInt(BigInt.zero()));
-    this.set("totalSupply", Value.fromBigInt(BigInt.zero()));
-    this.set("projectID", Value.fromString(""));
   }
 
   save(): void {
@@ -208,13 +196,6 @@ export class UserHolding extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
-
-    this.set("address", Value.fromBytes(Bytes.empty()));
-    this.set("tokenAmount", Value.fromBigInt(BigInt.zero()));
-    this.set("totalAllocated", Value.fromBigInt(BigInt.zero()));
-    this.set("totalWithdrawn", Value.fromBigInt(BigInt.zero()));
-    this.set("totalTransferred", Value.fromBigInt(BigInt.zero()));
-    this.set("derivativeID", Value.fromString(""));
   }
 
   save(): void {
@@ -301,14 +282,6 @@ export class Lock extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
-
-    this.set("address", Value.fromBytes(Bytes.empty()));
-    this.set("tokenAmount", Value.fromBigInt(BigInt.zero()));
-    this.set("totalAllocated", Value.fromBigInt(BigInt.zero()));
-    this.set("totalWithdrawn", Value.fromBigInt(BigInt.zero()));
-    this.set("unlockTime", Value.fromBigInt(BigInt.zero()));
-    this.set("vestID", Value.fromBigInt(BigInt.zero()));
-    this.set("projectID", Value.fromString(""));
   }
 
   save(): void {
@@ -404,12 +377,6 @@ export class Withdrawal extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
-
-    this.set("txHash", Value.fromBytes(Bytes.empty()));
-    this.set("token", Value.fromBytes(Bytes.empty()));
-    this.set("vestID", Value.fromBigInt(BigInt.zero()));
-    this.set("from", Value.fromBytes(Bytes.empty()));
-    this.set("amount", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -487,13 +454,6 @@ export class Transfer extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
-
-    this.set("txHash", Value.fromBytes(Bytes.empty()));
-    this.set("token", Value.fromBytes(Bytes.empty()));
-    this.set("vestID", Value.fromBigInt(BigInt.zero()));
-    this.set("from", Value.fromBytes(Bytes.empty()));
-    this.set("to", Value.fromBytes(Bytes.empty()));
-    this.set("amount", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
