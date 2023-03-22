@@ -35,11 +35,10 @@ export function handleWithdrawLock(event: Withdraw): void {
   
     // Creating a unique Lock ID, i.e. a combination of the Asset Address & VestID.
     let _userID = generateID(_wrappedTokenAddress, _vestID.toString());
-  
     // Loading the Lock Asset.
     let lock = Lock.load(_userID);
     if (lock) {
-      if(lock.unlockTime === _unlockTime && lock.address === _userAddress){
+      if(lock.unlockTime <= _unlockTime && Address.fromBytes(lock.address).toHex() == _userAddress.toHex()){
         let amount = lock.tokenAmount;
         let lockTotalWithdrawn = lock.totalWithdrawn;
         lock.tokenAmount = amount.minus(_amount);
@@ -47,7 +46,7 @@ export function handleWithdrawLock(event: Withdraw): void {
       }
       // Loading Derivative
       let derivative = Derivative.load(_wrappedTokenAddress);
-      if(derivative!=null){
+      if(derivative){
         // Loading Withdraw Entity
         let withdrawID = derivative.projectID.toLowerCase()
                         .concat(
@@ -67,6 +66,7 @@ export function handleWithdrawLock(event: Withdraw): void {
         withdraw.amount = _amount;
         withdraw.save();
       }
+      lock.save();
     }
   }
   
