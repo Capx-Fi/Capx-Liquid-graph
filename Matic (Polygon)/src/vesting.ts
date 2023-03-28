@@ -23,51 +23,50 @@ function generateID(_user: string, _ticker: string): string {
 
 // Vesting Event Handlers
 export function handleWithdrawLock(event: Withdraw): void {
-    // Getting all the required data from the Event.
-    let _txHash = event.transaction.hash;
-    let _userAddress = event.params.userAddress;
-    let _amount = event.params.amount;
-    let _wrappedTokenAddress = event.params.wrappedTokenAddress.toHexString();
-    let _unlockTime = event.params.unlockTime;
-    let _vestID = event.params.vestID;
-  
-    // Creating a unique Lock ID, i.e. a combination of the Asset Address & VestID.
-    let _userID = generateID(_wrappedTokenAddress, _vestID.toString());
-  
-    // Loading the Lock Asset.
-    let lock = Lock.load(_userID);
-    if (lock) {
-      if(lock.unlockTime === _unlockTime && lock.address === _userAddress){
-        let amount = lock.tokenAmount;
-        let lockTotalWithdrawn = lock.totalWithdrawn;
-        lock.tokenAmount = amount.minus(_amount);
-        lock.totalWithdrawn = lockTotalWithdrawn.plus(_amount);
-      }
-      lock.save();
-      // Loading Derivative
-      let derivative = Derivative.load(_wrappedTokenAddress);
-      if(derivative!=null){
-        // Loading Withdraw Entity
-        let withdrawID = derivative.projectID.toLowerCase()
-                        .concat(
-                          "-"
-                        ).concat(
-                          _userAddress.toHexString().toLowerCase()
-                        ).concat(
-                          "|"
-                        ).concat(
-                          _txHash.toHexString().toLowerCase()
-                        );
-        let withdraw = new Withdrawal(withdrawID);
-        withdraw.txHash = _txHash;
-        withdraw.token = Address.fromHexString(_wrappedTokenAddress);
-        withdraw.vestID = _vestID;
-        withdraw.from = _userAddress;
-        withdraw.amount = _amount;
-        withdraw.save();
-      }
+  // Getting all the required data from the Event.
+  let _txHash = event.transaction.hash;
+  let _userAddress = event.params.userAddress;
+  let _amount = event.params.amount;
+  let _wrappedTokenAddress = event.params.wrappedTokenAddress.toHexString();
+  let _unlockTime = event.params.unlockTime;
+  let _vestID = event.params.vestID;
+
+  // Creating a unique Lock ID, i.e. a combination of the Asset Address & VestID.
+  let _userID = generateID(_wrappedTokenAddress, _vestID.toString());
+  // Loading the Lock Asset.
+  let lock = Lock.load(_userID);
+  if (lock) {
+    if(lock.unlockTime <= _unlockTime && Address.fromBytes(lock.address).toHex() == _userAddress.toHex()){
+      let amount = lock.tokenAmount;
+      let lockTotalWithdrawn = lock.totalWithdrawn;
+      lock.tokenAmount = amount.minus(_amount);
+      lock.totalWithdrawn = lockTotalWithdrawn.plus(_amount);
     }
+    // Loading Derivative
+    let derivative = Derivative.load(_wrappedTokenAddress);
+    if(derivative){
+      // Loading Withdraw Entity
+      let withdrawID = derivative.projectID.toLowerCase()
+                      .concat(
+                        "-"
+                      ).concat(
+                        _userAddress.toHexString().toLowerCase()
+                      ).concat(
+                        "|"
+                      ).concat(
+                        _txHash.toHexString().toLowerCase()
+                      );
+      let withdraw = new Withdrawal(withdrawID);
+      withdraw.txHash = _txHash;
+      withdraw.token = Address.fromHexString(_wrappedTokenAddress);
+      withdraw.vestID = _vestID;
+      withdraw.from = _userAddress;
+      withdraw.amount = _amount;
+      withdraw.save();
+    }
+    lock.save();
   }
+}
   
   export function handleTransferLock(event: TransferLock): void {
     // Getting all the required data from the Event.
